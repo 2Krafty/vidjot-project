@@ -1,1 +1,1 @@
-# vidjot-project
+# vidjot
