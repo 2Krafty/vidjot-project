@@ -1,8 +1,8 @@
-const express = require('express');
+let express = require('express');
 
-const exphbs = require('express-handlebars');
+let exphbs = require('express-handlebars');
 
-const app = express();
+let app = express();
 
 
 
@@ -21,7 +21,7 @@ app.set('view engine', 'handlebars');
 
 // index route
 app.get('/', (req, res) => {
-  const title = 'Welcome';
+  let title = 'Welcome1';
   res.render('index', {
     title: title
   });
@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 app.get('/about', (req, res) => {
   res.render('about');
 });
-const port = 5000;
+let port = 5000;
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
