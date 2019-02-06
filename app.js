@@ -9,7 +9,7 @@ let app = express();
 // map global
 mongoose.Promise = global.Promise;
 //connect to mongoose
-mongoose.connect('mongodb+srv://krafty:TalenJames2011@vidjot-dev-ndnxz.mongodb.net/test?retryWrites=true')
+mongoose.connect('mongodb+srv://krafty:@vidjot-dev-ndnxz.mongodb.net/test?retryWrites=true')
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
 
