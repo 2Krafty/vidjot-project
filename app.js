@@ -1,12 +1,11 @@
 const express = require('express');
-
 const exphbs = require('express-handlebars');
-
+const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
-
 const mongoose = require('mongoose');
 
 let app = express();
+
 // map global
 mongoose.Promise = global.Promise;
 //connect to mongoose
@@ -30,6 +29,7 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(bodyParser.json())
 
+app.use(methodOverride('_method'));
 // How middleware works
 /*app.use((req, res, next) => {
   //console.log(Date.now());
@@ -109,6 +109,30 @@ app.post('/ideas', (req, res) => {
         res.redirect('/ideas');
       })
   }
+});
+
+// edit form process
+app.put('/ideas/:id', (req, res)=> {
+  Idea.findOne({
+    _id: req.params.id
+  })
+  .then(idea => {
+    idea.title = req.body.title;
+    idea.details = req.body.details;
+
+    idea.save()
+      .then(idea => {
+        res.redirect('/ideas');
+      })
+    
+  });
+});
+// delete idea
+app.delete('/ideas/:id',(req, res)=> {
+  Idea.remove({_id: req.params.id})
+  .then(()=> {
+    res.redirect('/ideas');
+  });
 });
 
 let port = 5000;
