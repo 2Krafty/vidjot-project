@@ -1,5 +1,7 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
+const flash = require('connect-flash');
+const session = require('express-session');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -9,7 +11,7 @@ let app = express();
 // map global
 mongoose.Promise = global.Promise;
 //connect to mongoose
-mongoose.connect('mongodb+srv://krafty:@vidjot-dev-ndnxz.mongodb.net/test?retryWrites=true')
+mongoose.connect('mongodb://localhost/vidjot-dev')
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
 
@@ -36,6 +38,25 @@ app.use(methodOverride('_method'));
   req.name = 'Christopher Kraft';
   next();
 });*/
+
+// express session middleware
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true,
+ 
+}))
+
+app.use(flash());
+
+//global variables
+app.use(function(req, res, next){
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  next();
+});
+
 
 // index route
 app.get('/', (req, res) => {
@@ -106,6 +127,7 @@ app.post('/ideas', (req, res) => {
     new Idea(newUser)
       .save()
       .then(idea => {
+        req.flash('success_msg', 'Video Idea Added');
         res.redirect('/ideas');
       })
   }
@@ -122,6 +144,7 @@ app.put('/ideas/:id', (req, res)=> {
 
     idea.save()
       .then(idea => {
+        req.flash('success_msg', 'Video Idea Updated');
         res.redirect('/ideas');
       })
     
@@ -131,6 +154,7 @@ app.put('/ideas/:id', (req, res)=> {
 app.delete('/ideas/:id',(req, res)=> {
   Idea.remove({_id: req.params.id})
   .then(()=> {
+    req.flash('success_msg', 'Video Idea Removed')
     res.redirect('/ideas');
   });
 });
