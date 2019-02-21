@@ -5,6 +5,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
+const passport = require('passport');
 const mongoose = require('mongoose');
 
 let app = express();
@@ -13,10 +14,13 @@ let app = express();
 const ideas = require('./routes/ideas');
 const users = require('./routes/users');
 
+//passport config
+require('./config/passport')('passport');
+
 // map global
 mongoose.Promise = global.Promise;
 //connect to mongoose
-mongoose.connect('mongodb://localhost/vidjot-dev')
+mongoose.connect('mongodb://localhost/vidjot-dev', { useNewUrlParser: true } )
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
 
@@ -52,7 +56,7 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
 
-}))
+}));
 
 app.use(flash());
 
