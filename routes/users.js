@@ -44,7 +44,7 @@ router.post('/register', (req, res) => {
     })
   }
   if (errors.length > 0) {
-    res.render('users/register', {
+    res.render('/users/register', {
       errors: errors,
       name: req.body.name,
       email: req.body.email,
@@ -86,6 +86,12 @@ router.post('/register', (req, res) => {
       });
 
   }
+});
+//logout user
+router.get('/logout',(req, res) => {
+  req.logout();
+  req.flash('success_msg', 'You are logged out');
+  res.redirect('/users/login');
 });
 
 module.exports = router;
